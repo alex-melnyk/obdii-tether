@@ -1,33 +1,46 @@
 import net from 'react-native-tcp';
 import { EventRegister } from 'react-native-event-listeners';
-
-const commandsQueue = [];
+import {CONNECTED, DATA_RECEIVED, DISCONNECTED, ERROR_RECEIVED} from "../utils/OBDIIEvents";
+import ATCommands from "../utils/ATCommands";
+import OBDIICommands from "../utils/OBDIICommands";
+import {commandResponseToObject} from "../utils/OBDIIConverter";
 
 let client = null;
-let waitingForResponse = false;
+let commandsQueue = [];
+
+let waitingForResponse = null;
+let obdiiResponse = [];
+
+let timerID;
 
 function initialCommands() {
-    this.sendATCommand('Z');
-    this.sendATCommand('E0');
-    this.sendATCommand('L0');
-    this.sendATCommand('H0');
-    this.sendATCommand('AT2');
-    this.sendATCommand('ST0A');
-    this.sendATCommand('SP5');
+    sendATCommand(ATCommands.RESET);
+    sendATCommand(ATCommands.ECHO_OFF);
+    sendATCommand(ATCommands.EXTRA_LINES_OFF);
+    sendATCommand(ATCommands.HEADERS_OFF);
+    sendATCommand(ATCommands.ADAPTIVE_TIMING_2);
+    // sendATCommand(ATCommands.SET_TIMING_40);
+    sendATCommand(ATCommands.SET_PROTOCOL_ISO14230_4_KWP_FI);
+    sendATCommand(ATCommands.FAST_INIT);
+    // sendATCommand('KW');
+    // sendATCommand(ATCommands.SLOW_INIT);
 }
 
-function dataReceived(data) {
-    const response = data.toString();
+function refreshData() {
+    // Read Voltage
+    sendATCommand(ATCommands.READ_VOLTAGE);
+    sendCommand(OBDIICommands.MODE01.RPM);
+    sendCommand(OBDIICommands.MODE01.ECT);
+    sendCommand(OBDIICommands.MODE01.SPEED);
 
-    if (response.indexOf('>') >= 0) {
-        waitingForResponse = false;
-    }
+}
 
-    EventRegister.emit('receive', data);
+/////////////////////////////
+////////// 7F 01 12 !!! ERROR
+/////////////////////////////
 
-    if (!waitingForResponse && commandsQueue.length) {
-        sendCommand(commandsQueue.pop());
-    }
+export function startMonitoring() {
+    timerID = setInterval(refreshData, 200);
 }
 
 /**
@@ -36,17 +49,18 @@ function dataReceived(data) {
  * @param host {String} host address.
  * @param port {Number} host port.
  */
-export function connect(host = '192.168.0.10', port = 35000) {
-    this.client = net.createConnection({host, port}, () => {
-        client.on('data', dataReceived);
+export function tryConnectOBDII(host = '192.168.0.10', port = 35000) {
+    client = net.createConnection({host, port}, () => {
+        EventRegister.emit(CONNECTED);
 
-        client.on('error', (error) => {
-            console.log('ERROR:', error);
-        });
+        client.on('data', collectReceivedData);
+        client.on('error', (error) => EventRegister.emit(ERROR_RECEIVED, error));
+        client.on('timeout', disconnect);
+        client.on('close', (hasError) => EventRegister.emit(DISCONNECTED, hasError));
 
         initialCommands();
 
-        EventRegister.emit('receive', data);
+        setTimeout(startMonitoring, 3000);
     });
 }
 
@@ -59,10 +73,48 @@ export function sendCommand(command) {
     if (client) {
         if (waitingForResponse) {
             commandsQueue.push(command);
+            return;
         }
 
-        waitingForResponse = true;
+        waitingForResponse = command;
         client.write(new Buffer(command + '\r'));
+        return;
+    }
+
+    waitingForResponse = "";
+    commandsQueue = [];
+}
+
+/**
+ *
+ * @param data
+ */
+function collectReceivedData(data) {
+    const trimData = data.toString().replace(/\r/g, '').trim();
+
+    // IF IT'S END OF RESPONSE
+    if (trimData.indexOf('>') >= 0) {
+        if (trimData.length > 1) {
+            obdiiResponse.push(trimData.replace('>', ''));
+        }
+
+        console.log(waitingForResponse, obdiiResponse);
+
+        const responses = commandResponseToObject(waitingForResponse, obdiiResponse);
+
+        if (responses.length) {
+            EventRegister.emit(DATA_RECEIVED, {responses});
+        }
+
+        waitingForResponse = "";
+        obdiiResponse = [];
+    } else {
+        obdiiResponse.push(trimData);
+    }
+
+    // PUSH NEXT COMMAND
+    if (!waitingForResponse && commandsQueue.length) {
+        sendCommand(commandsQueue.shift());
     }
 }
 

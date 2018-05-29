@@ -5,7 +5,6 @@
 	};
 	objectVersion = 46;
 	objects = {
-
 /* Begin PBXBuildFile section */
 		00C302E51ABCBA2D00DB3ED1 /* libRCTActionSheet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302AC1ABCB8CE00DB3ED1 /* libRCTActionSheet.a */; };
 		00C302E71ABCBA2D00DB3ED1 /* libRCTGeolocation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302BA1ABCB90400DB3ED1 /* libRCTGeolocation.a */; };
@@ -24,6 +23,7 @@
 		146834051AC3E58100842450 /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 146834041AC3E56700842450 /* libReact.a */; };
 		19E045CCB80A4B9A8ED0D3C6 /* Entypo.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8A3D1F771726408EAEBD7D22 /* Entypo.ttf */; };
 		22A5CF4405D047C49A9324C1 /* Zocial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7EA47D38A9334771A43E50E5 /* Zocial.ttf */; };
+		3546AF6BF9F64040AEE4A6CD /* DS-Digital.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DCEFE0D262884FC6A8A1DAAE /* DS-Digital.ttf */; };
 		376AE276F6A94068A1D28A21 /* MaterialCommunityIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F6F67D85027B471C9E188861 /* MaterialCommunityIcons.ttf */; };
 		3B27937F4C564D34B1249EAF /* Ionicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1B300EFC892449BD94DBF0B0 /* Ionicons.ttf */; };
 		4F4D0E2CD5964E6FAC893A16 /* Octicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 37EF38AAE9EB4D3D93C9A598 /* Octicons.ttf */; };
@@ -38,6 +38,7 @@
 		DDD95A3F675F4E0C887B6655 /* SimpleLineIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A9F3A68A32404D83AF677DAD /* SimpleLineIcons.ttf */; };
 		E1F70DA494BA4EAC9A2F2A6A /* MaterialIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 75BE453258E347478331E469 /* MaterialIcons.ttf */; };
 		E9F897EB48284748AF81B518 /* FontAwesome.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 35CD9F5E02794F67904A4AAA /* FontAwesome.ttf */; };
+		5B0A4059F593429C96F5CC14 /* digital_counter_7.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 115E8CAE2ED44D8693F10372 /* digital_counter_7.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -360,9 +361,11 @@
 		ADBDB91F1DFEBF0600ED6528 /* RCTBlob.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTBlob.xcodeproj; path = "../node_modules/react-native/Libraries/Blob/RCTBlob.xcodeproj"; sourceTree = "<group>"; };
 		B05CA5F0B7254109A5830BEC /* TcpSockets.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = TcpSockets.xcodeproj; path = "../node_modules/react-native-tcp/ios/TcpSockets.xcodeproj"; sourceTree = "<group>"; };
 		B1D5D477C6DF4046AD548079 /* Feather.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Feather.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Feather.ttf"; sourceTree = "<group>"; };
+		DCEFE0D262884FC6A8A1DAAE /* DS-Digital.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "DS-Digital.ttf"; path = "../assets/fonts/DS-Digital.ttf"; sourceTree = "<group>"; };
 		E711EAE5681C44DABAA46A06 /* Foundation.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Foundation.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Foundation.ttf"; sourceTree = "<group>"; };
 		F6F67D85027B471C9E188861 /* MaterialCommunityIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialCommunityIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/MaterialCommunityIcons.ttf"; sourceTree = "<group>"; };
 		FD0F6C216A9A46EDA312A388 /* libRNVectorIcons.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNVectorIcons.a; sourceTree = "<group>"; };
+		115E8CAE2ED44D8693F10372 /* digital_counter_7.ttf */ = {isa = PBXFileReference; name = "digital_counter_7.ttf"; path = "../assets/fonts/digital_counter_7.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -635,6 +638,8 @@
 				37EF38AAE9EB4D3D93C9A598 /* Octicons.ttf */,
 				A9F3A68A32404D83AF677DAD /* SimpleLineIcons.ttf */,
 				7EA47D38A9334771A43E50E5 /* Zocial.ttf */,
+				DCEFE0D262884FC6A8A1DAAE /* DS-Digital.ttf */,
+				115E8CAE2ED44D8693F10372 /* digital_counter_7.ttf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -1080,6 +1085,8 @@
 				4F4D0E2CD5964E6FAC893A16 /* Octicons.ttf in Resources */,
 				DDD95A3F675F4E0C887B6655 /* SimpleLineIcons.ttf in Resources */,
 				22A5CF4405D047C49A9324C1 /* Zocial.ttf in Resources */,
+				3546AF6BF9F64040AEE4A6CD /* DS-Digital.ttf in Resources */,
+				5B0A4059F593429C96F5CC14 /* digital_counter_7.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
