@@ -12,16 +12,12 @@ export function commandResponseToObject(command, response) {
  * @param data
  */
 function obtainATCommandData(command, data) {
-    return data.reduce((acc, response) => {
-        switch (command) {
-            case "AT RV":
-                return {
-                    ...acc,
-                    voltage: response
-                }
-        }
-        return acc;
-    }, {});
+    switch (command) {
+        case "AT RV":
+            return {
+                voltage: data[0].replace('AT RV', '')
+            }
+    }
 }
 
 /**
@@ -46,6 +42,17 @@ function obtainOBDCommandData(data) {
                             mode01Data
                         ];
                     }
+                    break;
+                case "61":
+                    const mode21Data = parseMode21(pid, payload);
+
+                    if (mode21Data) {
+                        return [
+                            ...acc,
+                            mode21Data
+                        ];
+                    }
+                    break;
             }
         }
 
@@ -67,7 +74,42 @@ function parseMode01(pid, data) {
             return {
                 speed: parseInt(data[0], 16)
             };
+        default:
+            return null;
+    }
+}
+
+function parseMode21(pid, data) {
+    switch (pid) {
+        case "01": {
+            if (data.length === 3) {
+                return {
+                    gear: obtainGear(parseInt(data[0], 16))
+                };
+            }
+        }
     }
 
     return null;
+}
+
+function obtainGear(rawGear) {
+    switch (rawGear) {
+        case 0:
+            return "1";
+        case 1:
+            return "2";
+        case 2:
+            return "3";
+        case 4:
+            return "D";
+        case 5:
+            return "N";
+        case 6:
+            return "R";
+        case 7:
+            return "P";
+        default:
+            return "E";
+    }
 }

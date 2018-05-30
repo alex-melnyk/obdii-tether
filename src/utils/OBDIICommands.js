@@ -34,6 +34,12 @@ export const MODE01 = {
     APPF: '01 4B',
 };
 
+const MODE21 = {
+    // 61 01 [0,1,2,4,5,6,7,A] = [1,2,3,D,N,R,P,E]
+    AGM: '21 01',
+};
+
 export default {
-    MODE01
+    MODE01,
+    MODE21
 };

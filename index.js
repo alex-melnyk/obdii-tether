@@ -18,7 +18,7 @@ class App extends Component {
             dispatch(OBDIIActions.obdiiConnected());
         });
         EventRegister.on(DATA_RECEIVED, (data) => {
-            console.log(data.responses);
+            // console.log(data.responses);
             const freshData = data.responses.reduce((acc, value) => ({
                 ...acc,
                 ...value

@@ -5,7 +5,7 @@ const initialState = {
     speed: 0,
     voltage: 0,
     temperature: 0,
-    cmv: 0,
+    gear: '0'
 };
 
 export default (state = initialState, action) => {

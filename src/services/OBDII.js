@@ -1,8 +1,8 @@
 import net from 'react-native-tcp';
-import { EventRegister } from 'react-native-event-listeners';
+import {EventRegister} from 'react-native-event-listeners';
 import {CONNECTED, DATA_RECEIVED, DISCONNECTED, ERROR_RECEIVED} from "../utils/OBDIIEvents";
 import ATCommands from "../utils/ATCommands";
-import OBDIICommands from "../utils/OBDIICommands";
+import OBDIICommands from '../utils/OBDIICommands';
 import {commandResponseToObject} from "../utils/OBDIIConverter";
 
 let client = null;
@@ -22,8 +22,10 @@ function initialCommands() {
     // sendATCommand(ATCommands.SET_TIMING_40);
     sendATCommand(ATCommands.SET_PROTOCOL_ISO14230_4_KWP_FI);
     sendATCommand(ATCommands.FAST_INIT);
+    // sendATCommand(ATCommands.IGNITION);
     // sendATCommand('KW');
     // sendATCommand(ATCommands.SLOW_INIT);
+    // setTimeout(refreshData, 3000);
 }
 
 function refreshData() {
@@ -32,7 +34,12 @@ function refreshData() {
     sendCommand(OBDIICommands.MODE01.RPM);
     sendCommand(OBDIICommands.MODE01.ECT);
     sendCommand(OBDIICommands.MODE01.SPEED);
-
+    sendCommand(OBDIICommands.MODE21.AGM);
+    // for (let i = 1; i < 2; i++) {
+    //     let code = i.toString(16);
+    //
+    //     sendCommand(`21 ${code.length === 1 ? '0' + code : code}`);
+    // }
 }
 
 /////////////////////////////
@@ -40,7 +47,7 @@ function refreshData() {
 /////////////////////////////
 
 export function startMonitoring() {
-    timerID = setInterval(refreshData, 200);
+    timerID = setInterval(refreshData, 10000);
 }
 
 /**
@@ -60,7 +67,7 @@ export function tryConnectOBDII(host = '192.168.0.10', port = 35000) {
 
         initialCommands();
 
-        setTimeout(startMonitoring, 3000);
+        setTimeout(startMonitoring, 100);
     });
 }
 
@@ -91,14 +98,15 @@ export function sendCommand(command) {
  */
 function collectReceivedData(data) {
     const trimData = data.toString().replace(/\r/g, '').trim();
+    // console.log('LOGGG', data, trimData);
 
     // IF IT'S END OF RESPONSE
     if (trimData.indexOf('>') >= 0) {
         if (trimData.length > 1) {
-            obdiiResponse.push(trimData.replace('>', ''));
+            obdiiResponse.push(trimData.replace('>', '').trim());
         }
 
-        console.log(waitingForResponse, obdiiResponse);
+        // console.log(waitingForResponse, obdiiResponse);
 
         const responses = commandResponseToObject(waitingForResponse, obdiiResponse);
 

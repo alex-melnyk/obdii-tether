@@ -85,7 +85,7 @@ class Home extends Component {
                         value={this.props.temperature}
                         suffix="˚C"
                         backdropShow={true}
-                        backdropDigits={4}
+                        backdropDigits={3}
                     />
 
                     <DigitalCounter
@@ -95,9 +95,10 @@ class Home extends Component {
                     />
 
                     <DigitalCounter
-                        label="VOL"
-                        value={this.props.cmv}
-                        suffix="V"
+                        label="AGM"
+                        value={this.props.gear}
+                        backdropShow={true}
+                        backdropDigits={1}
                     />
                 </View>
 
