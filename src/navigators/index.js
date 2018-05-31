@@ -1,5 +1,5 @@
 import React from "react";
-import {createBottomTabNavigator} from "react-navigation";
+import {createBottomTabNavigator, createStackNavigator} from "react-navigation";
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 import Home from "../components/Home";
@@ -21,8 +21,15 @@ const BaseNavigator = createBottomTabNavigator({
     }
 }, {
     tabBarOptions: {
-        showLabel: false,
+        showLabel: false
     }
 });
 
-export default BaseNavigator;
+const BaseStackNavigator = createStackNavigator({
+    Home: HomeContainer
+}, {
+    headerMode: 'none'
+});
+
+// export default BaseNavigator;
+export default BaseStackNavigator;
