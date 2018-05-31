@@ -3,9 +3,9 @@ import * as OBDIIActions from "../actions/OBDIIActions";
 const initialState = {
     rpm: 0,
     speed: 0,
-    voltage: 0,
-    temperature: 97,
-    gear: 'P'
+    voltage: 12.7,
+    temperature: 0,
+    gear: 'D'
 };
 
 export default (state = initialState, action) => {

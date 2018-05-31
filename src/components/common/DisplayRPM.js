@@ -1,59 +1,67 @@
 import React, {Component} from 'react';
 import {Animated, Text, View, Easing} from 'react-native';
 import PropTypes from 'prop-types';
+import Colors from "../../utils/Colors";
 
 class DisplayRPM extends Component {
     animatedValue = new Animated.Value(0);
 
-    componentDidMount() {
-        this.animatedValue.addListener(() => this.forceUpdate());
-    }
-
-    componentWillReceiveProps(nextProps) {
+    animateToValue = (value) => {
         Animated.timing(this.animatedValue, {
-            toValue: nextProps.value / 8000,
+            toValue: value / this.props.maximum,
             duration: 100,
             easing: Easing.linear
         }).start();
+    };
+
+    componentDidMount() {
+        this.animatedValue.addListener(() => this.forceUpdate());
+
+        this.animateToValue(this.props.value);
+    }
+
+    componentWillReceiveProps(nextProps) {
+        this.animateToValue(nextProps.value);
     }
 
     render() {
         const {
+            style,
             size,
-            color,
-            label,
-            value,
-            style
+            overload,
+            maximum,
         } = this.props;
 
         const animatedProgress = this.animatedValue.interpolate({
             inputRange: [0, 1],
-            outputRange: [0, 8000]
+            outputRange: [0, maximum]
         });
+
+        const value = Math.round(animatedProgress.__getValue());
+
+        const hightlight = value < overload ? Colors.COSMIC_LATTE : Colors.CRIMSON;
+        const oversize = value < overload ? 0 : 10;
 
         return (
             <View style={[{
                 alignItems: 'center',
                 justifyContent: 'center',
-                width: 100
+                width: 120
             }, style]}>
                 <Text style={{
                     textAlign: 'center',
-                    color: color,
-                    fontSize: size,
+                    color: hightlight,
+                    fontSize: size + oversize,
                     fontFamily: '1GTA SA',
                     // backgroundColor: 'red'
-                }}>{Math.round(animatedProgress.__getValue())}</Text>
-                {
-                    label &&
-                    <Text style={{
-                        textAlign: 'center',
-                        marginTop: 5,
-                        fontFamily: '1GTA SA',
-                        fontSize: size / 2,
-                        color: '#ED1C24'
-                    }}>{label}</Text>
-                }
+                }}>{value}</Text>
+                <Text style={{
+                    textAlign: 'center',
+                    marginTop: 5,
+                    fontFamily: '1GTA SA',
+                    fontSize: size / 2,
+                    color: '#ED1C24'
+                }}>RPM</Text>
             </View>
         );
     }
@@ -61,14 +69,16 @@ class DisplayRPM extends Component {
 
 DisplayRPM.propTypes = {
     size: PropTypes.number,
-    color: PropTypes.string,
-    label: PropTypes.string,
     value: PropTypes.any,
+    overload: PropTypes.number,
+    maximum: PropTypes.number,
 };
 
 DisplayRPM.defaultProps = {
     size: 60,
-    color: '#FFFCE8'
+    color: '#FFFCE8',
+    overload: 6500,
+    maximum: 8000,
 };
 
 const Style = {

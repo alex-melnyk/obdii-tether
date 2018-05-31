@@ -11,7 +11,7 @@ class Home extends Component {
         connected: false,
         command: '',
         responses: [],
-        curRPM: 680,
+        rpm: 0,
         speed: 0
     };
 
@@ -31,17 +31,17 @@ class Home extends Component {
     };
 
     componentDidMount() {
-        setInterval(() => {
-            this.setState({
-                curRPM: 600 + Math.random() * 100
-            });
-        }, 250);
+        // setInterval(() => {
+        //     this.setState({
+        //         curRPM: 600 + Math.random() * 100
+        //     });
+        // }, 250);
 
-        setInterval(() => {
-            this.setState({
-                speed: this.state.speed <= 50 ? this.state.speed + 10 : 0
-            });
-        }, 1000);
+        // setInterval(() => {
+        //     this.setState({
+        //         speed: this.state.speed <= 50 ? this.state.speed + 10 : 0
+        //     });
+        // }, 1000);
     }
 
     render() {
@@ -50,7 +50,13 @@ class Home extends Component {
             connected,
         } = this.props;
 
-        const {curRPM} = this.state;
+        const {
+            rpm,
+            speed,
+            voltage,
+            temperature,
+            gear
+        } = this.props;
 
         return (
             <SafeAreaView style={{
@@ -89,38 +95,36 @@ class Home extends Component {
                     <DisplayDigit
                         label="VOLTAGE"
                         size={20}
-                        value="12.4V"
+                        value={voltage}
                     />
                     <View style={{
                         alignItems: 'center',
                         justifyContent: 'center'
                     }}>
-                        <GraphicalRPM value={curRPM}/>
+                        <GraphicalRPM value={this.props.rpm}/>
                         <View style={{
                             position: 'absolute'
                         }}>
+                            <DisplayGearBox
+                                style={{top: -30}}
+                                value={gear}
+                            />
                             {
-                                this.props.gear &&
-                                <DisplayGearBox value={this.props.gear}/>
-                            }
-                            {
-                                this.state.speed !== null &&
-                                <DisplaySpeed value={this.state.speed} />
+                                speed !== null &&
+                                <DisplaySpeed value={speed}/>
                             }
                             <DisplayRPM
-                                style={{
-                                    top: 50
-                                }}
-                                label="rpm"
+                                style={{top: 50}}
+                                label="RPM"
                                 size={20}
-                                value={Math.round(curRPM)}
+                                value={Math.round(rpm)}
                             />
                         </View>
                     </View>
                     <DisplayDigit
                         label="˚C"
                         size={20}
-                        value={107}
+                        value={temperature}
                     />
                 </View>
             </SafeAreaView>
