@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Animated, Text, View, Easing} from 'react-native';
 import PropTypes from 'prop-types';
-import Colors from "../../utils/Colors";
+import Colors, {hexToRgb} from "../../utils/Colors";
 
 class DisplayRPM extends Component {
     animatedValue = new Animated.Value(0);
@@ -28,6 +28,7 @@ class DisplayRPM extends Component {
         const {
             style,
             size,
+            working,
             overload,
             maximum,
         } = this.props;
@@ -39,22 +40,29 @@ class DisplayRPM extends Component {
 
         const value = Math.round(animatedProgress.__getValue());
 
-        const hightlight = value < overload ? Colors.COSMIC_LATTE : Colors.CRIMSON;
-        const oversize = value < overload ? 0 : 10;
+        const animatedColor = this.animatedValue.interpolate({
+            inputRange: [0, working / maximum, 1],
+            outputRange: [
+                hexToRgb(Colors.COSMIC_LATTE.replace('#', '')),
+                hexToRgb(Colors.COSMIC_LATTE.replace('#', '')),
+                hexToRgb(Colors.CRIMSON.replace('#', ''))
+            ]
+        });
 
         return (
             <View style={[{
+                top: 50,
                 alignItems: 'center',
                 justifyContent: 'center',
                 width: 120
             }, style]}>
-                <Text style={{
+                <Animated.Text style={{
                     textAlign: 'center',
-                    color: hightlight,
-                    fontSize: size + oversize,
+                    color: animatedColor,
+                    fontSize: size,
                     fontFamily: '1GTA SA',
                     // backgroundColor: 'red'
-                }}>{value}</Text>
+                }}>{value}</Animated.Text>
                 <Text style={{
                     textAlign: 'center',
                     marginTop: 5,
@@ -75,17 +83,11 @@ DisplayRPM.propTypes = {
 };
 
 DisplayRPM.defaultProps = {
-    size: 60,
+    size: 20,
     color: '#FFFCE8',
     overload: 6500,
     maximum: 8000,
-};
-
-const Style = {
-    backdrop: {
-        fontFamily: 'Digital Counter 7',
-        opacity: 0.25,
-    }
+    working: 3000,
 };
 
 export {DisplayRPM};

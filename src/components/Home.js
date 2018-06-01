@@ -1,10 +1,11 @@
 import React, {Component} from 'react';
 import {Dimentions, SafeAreaView, Text, View} from 'react-native';
-import {DisplayDigit} from "./common/DisplayDigit";
 import {DisplayGearBox} from "./common/DisplayGearBox";
 import {DisplayRPM} from "./common/DisplayRPM";
 import {GraphicalRPM} from "./common/GraphicalRPM";
 import {DisplaySpeed} from "./common/DisplaySpeed";
+import {GraphicalFuel} from "./common/GraphicalFuel";
+import {GraphicalTemperature} from "./common/GraphicalTemperature";
 
 class Home extends Component {
     state = {
@@ -12,7 +13,11 @@ class Home extends Component {
         command: '',
         responses: [],
         rpm: 0,
-        speed: 0
+        speed: 0,
+        voltage: 12.6,
+        temperature: 97,
+        gear: 'D',
+        fuel: 80
     };
 
     connectionClicked = () => {
@@ -31,17 +36,17 @@ class Home extends Component {
     };
 
     componentDidMount() {
-        // setInterval(() => {
-        //     this.setState({
-        //         curRPM: 600 + Math.random() * 100
-        //     });
-        // }, 250);
+        setInterval(() => {
+            this.setState({
+                rpm: 600 + Math.random() * 7400
+            });
+        }, 500);
 
-        // setInterval(() => {
-        //     this.setState({
-        //         speed: this.state.speed <= 50 ? this.state.speed + 10 : 0
-        //     });
-        // }, 1000);
+        setInterval(() => {
+            this.setState({
+                speed: this.state.speed <= 160 ? this.state.speed + 10 : 0
+            });
+        }, 200);
     }
 
     render() {
@@ -54,9 +59,10 @@ class Home extends Component {
             rpm,
             speed,
             voltage,
+            fuel,
             temperature,
             gear
-        } = this.props;
+        } = this.state;
 
         return (
             <SafeAreaView style={{
@@ -64,68 +70,33 @@ class Home extends Component {
                 justifyContent: 'center',
                 backgroundColor: '#0F110C'
             }}>
-
-                {/*<TouchableOpacity onPress={this.connectionClicked}>*/}
-                {/*<View style={{*/}
-                {/*flexDirection: 'row',*/}
-                {/*alignItems: 'center',*/}
-                {/*justifyContent: 'flex-end',*/}
-                {/*height: 50,*/}
-                {/*width: '100%',*/}
-                {/*paddingHorizontal: 20,*/}
-                {/*}}>{*/}
-                {/*connecting ? (*/}
-                {/*<ActivityIndicator/>*/}
-                {/*) : (*/}
-                {/*<Icon*/}
-                {/*name={`toggle-${connected ? 'on' : 'off'}`}*/}
-                {/*size={16}*/}
-                {/*/>*/}
-                {/*)*/}
-                {/*}</View>*/}
-                {/*</TouchableOpacity>*/}
-
                 <View style={{
-                    paddingHorizontal: 50,
+                    paddingHorizontal: 20,
                     flex: 1,
                     flexDirection: 'row',
                     alignItems: 'center',
-                    justifyContent: 'space-between',
+                    justifyContent: 'space-between'
                 }}>
-                    <DisplayDigit
-                        label="VOLTAGE"
-                        size={20}
-                        value={voltage}
+                    <GraphicalFuel
+                        value={fuel}
+                        maximum={100}
                     />
                     <View style={{
                         alignItems: 'center',
                         justifyContent: 'center'
                     }}>
-                        <GraphicalRPM value={this.props.rpm}/>
+                        <GraphicalRPM value={rpm}/>
                         <View style={{
                             position: 'absolute'
                         }}>
                             <DisplayGearBox
-                                style={{top: -30}}
                                 value={gear}
                             />
-                            {
-                                speed !== null &&
-                                <DisplaySpeed value={speed}/>
-                            }
-                            <DisplayRPM
-                                style={{top: 50}}
-                                label="RPM"
-                                size={20}
-                                value={Math.round(rpm)}
-                            />
+                            <DisplaySpeed value={speed}/>
+                            <DisplayRPM value={Math.round(rpm)} />
                         </View>
                     </View>
-                    <DisplayDigit
-                        label="˚C"
-                        size={20}
-                        value={temperature}
-                    />
+                    <GraphicalTemperature value={temperature}/>
                 </View>
             </SafeAreaView>
         );

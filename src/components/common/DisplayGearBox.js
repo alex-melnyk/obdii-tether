@@ -32,6 +32,7 @@ class DisplayGearBox extends Component {
 
         return (
             <View style={[{
+                top: -30,
                 alignItems: 'center',
                 justifyContent: 'center'
             }, style]}>

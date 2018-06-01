@@ -3,7 +3,9 @@ import {Animated, Text, View} from 'react-native';
 import PropTypes from 'prop-types';
 import {makeArc} from "../../utils/Graphic";
 import {Path, Svg} from "react-native-svg";
-import Colors from "../../utils/Colors";
+import Colors, {hexToRgb} from "../../utils/Colors";
+
+const AnimatedPath = Animated.createAnimatedComponent(Path);
 
 class GraphicalRPM extends Component {
     animatedValue = new Animated.Value(0);
@@ -30,7 +32,8 @@ class GraphicalRPM extends Component {
             angleFrom,
             angleTill,
             overload,
-            maximum
+            maximum,
+            working
         } = this.props;
 
         const width = 400;
@@ -46,6 +49,15 @@ class GraphicalRPM extends Component {
             outputRange: [angleFrom, angleTill]
         });
 
+        const animatedColor = this.animatedValue.interpolate({
+            inputRange: [0, working / maximum, 1],
+            outputRange: [
+                hexToRgb(Colors.COSMIC_LATTE.replace('#', '')),
+                hexToRgb(Colors.COSMIC_LATTE.replace('#', '')),
+                hexToRgb(Colors.CRIMSON.replace('#', ''))
+            ]
+        });
+
         const overdrive = overload / maximum * angleDiff - angleTill;
         const strokeDots = Math.PI * radius * angleDiff / 180 / 48 - 1;
         const strokeDash = Math.PI * radius * angleDiff / 180 / 8 - 5.5;
@@ -59,10 +71,10 @@ class GraphicalRPM extends Component {
                     strokeWidth={16}
                     strokeLinecap="round"
                 />
-                <Path
+                <AnimatedPath
                     d={makeArc(cx, cy, radius, angleFrom, animatedProgress.__getValue())}
                     fill="none"
-                    stroke={Colors.COSMIC_LATTE}
+                    stroke={animatedColor.__getValue()}
                     strokeWidth={10}
                     strokeLinecap="round"
                 />
@@ -87,13 +99,13 @@ class GraphicalRPM extends Component {
     }
 }
 
-//#DB162F
 GraphicalRPM.propTypes = {
     angleFrom: PropTypes.number,
     angleTill: PropTypes.number,
     value: PropTypes.number,
     overload: PropTypes.number,
     maximum: PropTypes.number,
+    working: PropTypes.number,
 };
 
 GraphicalRPM.defaultProps = {
@@ -102,13 +114,7 @@ GraphicalRPM.defaultProps = {
     value: 0,
     overload: 6500,
     maximum: 8000,
-};
-
-const Style = {
-    backdrop: {
-        fontFamily: 'Digital Counter 7',
-        opacity: 0.25,
-    }
+    working: 3000,
 };
 
 export {GraphicalRPM};

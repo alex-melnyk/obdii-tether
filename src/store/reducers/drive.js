@@ -1,10 +1,11 @@
 import * as OBDIIActions from "../actions/OBDIIActions";
 
 const initialState = {
-    rpm: 0,
-    speed: 0,
+    rpm: 600,
+    speed: 98,
     voltage: 12.7,
-    temperature: 0,
+    temperature: 97,
+    fuel: 80,
     gear: 'D'
 };
 

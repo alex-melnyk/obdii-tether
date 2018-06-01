@@ -14,9 +14,10 @@ class App extends Component {
     componentDidMount() {
         const {dispatch} = Store;
 
-        EventRegister.on(CONNECTED, (command, data) => {
+        EventRegister.on(CONNECTED, () => {
             dispatch(OBDIIActions.obdiiConnected());
         });
+
         EventRegister.on(DATA_RECEIVED, (data) => {
             // console.log(data.responses);
             const freshData = data.responses.reduce((acc, value) => ({
