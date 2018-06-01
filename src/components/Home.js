@@ -1,11 +1,13 @@
 import React, {Component} from 'react';
-import {Dimentions, SafeAreaView, Text, View} from 'react-native';
+import {Dimentions, SafeAreaView, Text, TouchableOpacity, View} from 'react-native';
+import Icon from 'react-native-vector-icons/Ionicons';
 import {DisplayGearBox} from "./common/DisplayGearBox";
 import {DisplayRPM} from "./common/DisplayRPM";
 import {GraphicalRPM} from "./common/GraphicalRPM";
 import {DisplaySpeed} from "./common/DisplaySpeed";
 import {GraphicalFuel} from "./common/GraphicalFuel";
 import {GraphicalTemperature} from "./common/GraphicalTemperature";
+import Colors from "../utils/Colors";
 
 class Home extends Component {
     state = {
@@ -15,9 +17,9 @@ class Home extends Component {
         rpm: 0,
         speed: 0,
         voltage: 12.6,
-        temperature: 97,
+        temperature: 101,
         gear: 'D',
-        fuel: 80
+        fuel: 65
     };
 
     connectionClicked = () => {
@@ -30,23 +32,23 @@ class Home extends Component {
 
         if (!connecting && !connected) {
             obdiiConnect();
-        } else if (!connecting && connected) {
+        } else if (connecting || connected) {
             obdiiDisconnect();
         }
     };
 
     componentDidMount() {
-        setInterval(() => {
-            this.setState({
-                rpm: 600 + Math.random() * 7400
-            });
-        }, 500);
-
-        setInterval(() => {
-            this.setState({
-                speed: this.state.speed <= 160 ? this.state.speed + 10 : 0
-            });
-        }, 200);
+        // setInterval(() => {
+        //     this.setState({
+        //         rpm: 600 + Math.random() * 7400
+        //     });
+        // }, 500);
+        //
+        // setInterval(() => {
+        //     this.setState({
+        //         speed: this.state.speed <= 160 ? this.state.speed + 10 : 0
+        //     });
+        // }, 200);
     }
 
     render() {
@@ -55,32 +57,56 @@ class Home extends Component {
             connected,
         } = this.props;
 
+        // const connecting = true;
+        // const connected = false;
+
         const {
             rpm,
             speed,
-            voltage,
-            fuel,
             temperature,
-            gear
-        } = this.state;
+            gear,
+            fuel,
+        } = this.props;
 
         return (
             <SafeAreaView style={{
                 flex: 1,
-                justifyContent: 'center',
                 backgroundColor: '#0F110C'
             }}>
                 <View style={{
-                    paddingHorizontal: 20,
+                    // position: 'absolute',
+                    padding: 5,
+                    alignItems: 'flex-end'
+                }}>
+                    <TouchableOpacity onPress={this.connectionClicked}>
+                        <View style={{
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            width: 26,
+                            height: 26,
+                            // borderRadius: 13,
+                            // backgroundColor: Colors.COSMIC_LATTE
+                        }}>
+                            <Icon
+                                style={{top: 2}}
+                                name={'ios-flash'}
+                                size={20}
+                                color={connecting
+                                    ? Colors.STIL_DE_GRAIN_YELLOW
+                                    : connected ? Colors.PASTEL_GREEN : Colors.CRIMSON
+                                }
+                            />
+                        </View>
+                    </TouchableOpacity>
+                </View>
+                <View style={{
                     flex: 1,
+                    paddingHorizontal: 20,
                     flexDirection: 'row',
                     alignItems: 'center',
                     justifyContent: 'space-between'
                 }}>
-                    <GraphicalFuel
-                        value={fuel}
-                        maximum={100}
-                    />
+                    <GraphicalFuel value={fuel}/>
                     <View style={{
                         alignItems: 'center',
                         justifyContent: 'center'
@@ -89,11 +115,9 @@ class Home extends Component {
                         <View style={{
                             position: 'absolute'
                         }}>
-                            <DisplayGearBox
-                                value={gear}
-                            />
+                            <DisplayGearBox value={gear}/>
                             <DisplaySpeed value={speed}/>
-                            <DisplayRPM value={Math.round(rpm)} />
+                            <DisplayRPM value={Math.round(rpm)}/>
                         </View>
                     </View>
                     <GraphicalTemperature value={temperature}/>

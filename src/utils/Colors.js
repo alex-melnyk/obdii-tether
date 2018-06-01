@@ -4,7 +4,9 @@ export default {
     TIMBERWOLF: '#DAD6D6',
     CELESTIAL_BLUE: '#3E92CC',
     CRIMSON: '#DB162F',
-    TRACTOR_RED: '#F71735'
+    TRACTOR_RED: '#F71735',
+    STIL_DE_GRAIN_YELLOW: '#F9DC5C',
+    PASTEL_GREEN: '#81E979',
 };
 
 export function hexToRgb(hex) {

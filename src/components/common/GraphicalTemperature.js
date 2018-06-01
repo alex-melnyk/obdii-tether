@@ -11,12 +11,12 @@ const AnimatedPath = Animated.createAnimatedComponent(Path);
 class GraphicalTemperature extends Component {
     animatedValue = new Animated.Value(0);
 
-    animateToValue = (value) => {
+    animateToValue = (value, duration = 1000) => {
         const total = this.props.maximum - this.props.minimum;
 
         Animated.timing(this.animatedValue, {
             toValue: value / total - this.props.minimum / total,
-            duration: 100
+            duration
         }).start();
     };
 
@@ -76,13 +76,6 @@ class GraphicalTemperature extends Component {
             }, style]}>
                 <View>
                     <Svg {...{width, height}}>
-                        {/*<Path*/}
-                        {/*d={makeArc(cx, cy, radius, overdrive, angleTill)}*/}
-                        {/*fill="none"*/}
-                        {/*stroke={Colors.CRIMSON}*/}
-                        {/*strokeWidth={16}*/}
-                        {/*strokeLinecap="round"*/}
-                        {/*/>*/}
                         <AnimatedPath
                             d={makeArc(cx, cy, radius, animatedProgress.__getValue(), angleTill)}
                             fill="none"
@@ -116,19 +109,30 @@ class GraphicalTemperature extends Component {
                     alignItems: 'flex-start'
                 }}>
                     <View style={{
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        width: 32,
-                        height: 32,
-                        borderRadius: 20,
-                        backgroundColor: Colors.TIMBERWOLF
+                        alignItems: 'center'
                     }}>
-                        <Icon
-                            style={{top: 2}}
-                            name="oil-temperature"
-                            color={Colors.SMOKY_BLACK}
-                            size={22}
-                        />
+                        <View style={{
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            width: 32,
+                            height: 32,
+                            borderRadius: 20,
+                            backgroundColor: Colors.TIMBERWOLF
+                        }}>
+                            <Icon
+                                style={{top: 2}}
+                                name="oil-temperature"
+                                color={Colors.SMOKY_BLACK}
+                                size={22}
+                            />
+                        </View>
+                        <Text style={{
+                            marginTop: 10,
+                            textAlign: 'center',
+                            fontSize: 12,
+                            fontFamily: '1GTA SA',
+                            color: Colors.CRIMSON
+                        }}>{Math.floor(this.props.value)}˚C</Text>
                     </View>
                 </View>
             </View>

@@ -74,6 +74,10 @@ function parseMode01(pid, data) {
             return {
                 speed: parseInt(data[0], 16)
             };
+        case "2F":
+            return {
+                fuel: parseInt(data[0], 16) * 100 / 255
+            };
         default:
             return null;
     }

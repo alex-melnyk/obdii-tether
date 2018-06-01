@@ -9,10 +9,10 @@ import Colors from "../../utils/Colors";
 class GraphicalFuel extends Component {
     animatedValue = new Animated.Value(0);
 
-    animateToValue = (value) => {
+    animateToValue = (value, duration = 1000) => {
         Animated.timing(this.animatedValue, {
             toValue: value / this.props.maximum,
-            duration: 100
+            duration
         }).start();
     };
 
@@ -30,9 +30,7 @@ class GraphicalFuel extends Component {
         const {
             style,
             angleFrom,
-            angleTill,
-            overload,
-            maximum
+            angleTill
         } = this.props;
 
         const width = 74;
@@ -48,7 +46,6 @@ class GraphicalFuel extends Component {
             outputRange: [angleFrom, angleTill]
         });
 
-        const overdrive = overload / maximum * angleDiff - angleTill;
         const strokeDots = Math.PI * radius * angleDiff / 180 / 20 - 1;
         const strokeDash = Math.PI * radius * angleDiff / 180 / 2 - 7;
 
@@ -57,15 +54,8 @@ class GraphicalFuel extends Component {
                 height: '100%',
                 justifyContent: 'center'
             }, style]}>
-                <View style={{}}>
+                <View>
                     <Svg {...{width, height}}>
-                        {/*<Path*/}
-                        {/*d={makeArc(cx, cy, radius, overdrive, angleTill)}*/}
-                        {/*fill="none"*/}
-                        {/*stroke={Colors.CRIMSON}*/}
-                        {/*strokeWidth={16}*/}
-                        {/*strokeLinecap="round"*/}
-                        {/*/>*/}
                         <Path
                             d={makeArc(cx, cy, radius, angleFrom, animatedProgress.__getValue())}
                             fill="none"
@@ -99,19 +89,30 @@ class GraphicalFuel extends Component {
                     alignItems: 'flex-end'
                 }}>
                     <View style={{
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        width: 32,
-                        height: 32,
-                        borderRadius: 20,
-                        backgroundColor: Colors.TIMBERWOLF
+                        alignItems: 'center'
                     }}>
-                        <Icon
-                            style={{top: 2}}
-                            name="fuel"
-                            color={Colors.SMOKY_BLACK}
-                            size={26}
-                        />
+                        <View style={{
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            width: 32,
+                            height: 32,
+                            borderRadius: 20,
+                            backgroundColor: Colors.TIMBERWOLF
+                        }}>
+                            <Icon
+                                style={{top: 2}}
+                                name="fuel"
+                                color={Colors.SMOKY_BLACK}
+                                size={26}
+                            />
+                        </View>
+                        <Text style={{
+                            marginTop: 10,
+                            textAlign: 'center',
+                            fontSize: 12,
+                            fontFamily: '1GTA SA',
+                            color: Colors.CRIMSON
+                        }}>{Math.floor(this.props.value)}L</Text>
                     </View>
                 </View>
             </View>
@@ -133,8 +134,7 @@ GraphicalFuel.defaultProps = {
     angleFrom: -135,
     angleTill: -45,
     value: 0,
-    overload: 6500,
-    maximum: 8000,
+    maximum: 65,
 };
 
 export {GraphicalFuel};

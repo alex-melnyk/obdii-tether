@@ -30,10 +30,11 @@ function initialCommands() {
 
 function refreshData() {
     // Read Voltage
-    sendATCommand(ATCommands.READ_VOLTAGE);
+    // sendATCommand(ATCommands.READ_VOLTAGE);
     sendCommand(OBDIICommands.MODE01.RPM);
-    sendCommand(OBDIICommands.MODE01.ECT);
     sendCommand(OBDIICommands.MODE01.SPEED);
+    sendCommand(OBDIICommands.MODE01.FUEL_LEVEL);
+    sendCommand(OBDIICommands.MODE01.ECT);
     sendCommand(OBDIICommands.MODE21.AGM);
     // for (let i = 1; i < 2; i++) {
     //     let code = i.toString(16);
@@ -47,7 +48,7 @@ function refreshData() {
 /////////////////////////////
 
 export function startMonitoring() {
-    timerID = setInterval(refreshData, 10000);
+    timerID = setInterval(refreshData, 100);
 }
 
 /**
@@ -67,7 +68,7 @@ export function tryConnectOBDII(host = '192.168.0.10', port = 35000) {
 
         initialCommands();
 
-        setTimeout(startMonitoring, 100);
+        setTimeout(startMonitoring, 3000);
     });
 }
 
@@ -136,7 +137,17 @@ export function sendATCommand(command) {
 }
 
 export function disconnect() {
-    client.end();
-    client.destroy();
-    client = null;
+    if (timerID) {
+        clearInterval(timerID);
+    }
+
+    if (client) {
+        client.end();
+        client.destroy();
+        client = null;
+    }
+
+    waitingForResponse = null;
+    obdiiResponse = [];
+    commandsQueue = [];
 }

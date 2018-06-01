@@ -9,6 +9,7 @@ export default ({dispatch, getState}) => (next) => (action) => {
             OBDII.tryConnectOBDII();
             break;
         case OBDIIActions.OBDII_DISCONNECT_ACTION:
+            dispatch(OBDIIActions.obdiiDisconnected());
             OBDII.disconnect();
             break;
     }

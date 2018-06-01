@@ -7,7 +7,7 @@ const initialState = {
 
 export default (state= initialState, action) => {
     switch (action.type) {
-        case OBDIIActions.OBDII_CONNECT_ACTION:
+        case OBDIIActions.OBDII_CONNECTING_ACTION:
             return {
                 connecting: true,
                 connected: false,
