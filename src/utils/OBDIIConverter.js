@@ -13,9 +13,15 @@ export function commandResponseToObject(command, response) {
  */
 function obtainATCommandData(command, data) {
     switch (command) {
+        case "AT FI":
+            const initOK = data.join(' ').indexOf("OK") >= 0;
+            console.log(command, data, initOK);
+            return {
+                initialized: initOK
+            };
         case "AT RV":
             return {
-                voltage: data[0].replace('AT RV', '')
+                voltage: parseFloat(data[0].replace('AT RV', ''))
             }
     }
 }

@@ -8,6 +8,7 @@ import {DisplaySpeed} from "./common/DisplaySpeed";
 import {GraphicalFuel} from "./common/GraphicalFuel";
 import {GraphicalTemperature} from "./common/GraphicalTemperature";
 import Colors from "../utils/Colors";
+import {DisplayClock} from "./common/DisplayClock";
 
 class Home extends Component {
     state = {
@@ -118,6 +119,18 @@ class Home extends Component {
                             <DisplayGearBox value={gear}/>
                             <DisplaySpeed value={speed}/>
                             <DisplayRPM value={Math.round(rpm)}/>
+                            <View style={{
+                                top: 60,
+                                paddingHorizontal: 10,
+                                paddingVertical: 1,
+                                flexDirection: 'row',
+                                justifyContent: 'center',
+                                borderRadius: 16,
+                                backgroundColor: Colors.TIMBERWOLF
+                            }}>
+                                {/* BOTTOM BAR */}
+                                <DisplayClock />
+                            </View>
                         </View>
                     </View>
                     <GraphicalTemperature value={temperature}/>

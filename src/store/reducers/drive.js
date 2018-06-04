@@ -4,9 +4,9 @@ const initialState = {
     rpm: 0,
     speed: 0,
     voltage: 12.7,
-    temperature: 0,
+    temperature: -40,
     fuel: 0,
-    gear: null
+    gear: ''
 };
 
 export default (state = initialState, action) => {

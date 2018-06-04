@@ -6,7 +6,7 @@ import {EventRegister} from 'react-native-event-listeners'
 import Store from './src/store';
 import BaseNavigator from "./src/navigators/index";
 import * as OBDIIActions from './src/store/actions/OBDIIActions';
-import {CONNECTED, DATA_RECEIVED, DISCONNECTED} from "./src/utils/OBDIIEvents";
+import {CONNECTED, DATA_RECEIVED, DISCONNECTED, INITIALIZATION_SUCCESS} from "./src/utils/OBDIIEvents";
 
 YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
 
@@ -14,7 +14,7 @@ class App extends Component {
     componentDidMount() {
         const {dispatch} = Store;
 
-        EventRegister.on(CONNECTED, () => {
+        EventRegister.on(INITIALIZATION_SUCCESS, () => {
             dispatch(OBDIIActions.obdiiConnected());
         });
 
