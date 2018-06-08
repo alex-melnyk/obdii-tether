@@ -3,6 +3,7 @@ export const OBDII_CONNECTED_ACTION = 'OBDII_CONNECTED_ACTION';
 export const OBDII_CONNECTING_ACTION = 'OBDII_CONNECTING_ACTION';
 export const OBDII_DISCONNECT_ACTION = 'OBDII_DISCONNECT_ACTION';
 export const OBDII_DISCONNECTED_ACTION = 'OBDII_DISCONNECTED_ACTION';
+export const OBDII_SCAN_DATA_RECEIVED_ACTION = 'OBDII_SCAN_DATA_RECEIVED_ACTION';
 export const OBDII_DATA_RECEIVED_ACTION = 'OBDII_DATA_RECEIVED_ACTION';
 
 export function obdiiConnect() {
@@ -33,6 +34,12 @@ export function obdiiDisconnected() {
 export function obdiiDataReceived(data) {
     return {
         type: OBDII_DATA_RECEIVED_ACTION,
+        payload: data
+    };
+}
+export function obdiiScanDataReceived(data) {
+    return {
+        type: OBDII_SCAN_DATA_RECEIVED_ACTION,
         payload: data
     };
 }

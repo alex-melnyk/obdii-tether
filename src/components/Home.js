@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {Dimentions, SafeAreaView, Text, TouchableOpacity, View} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
+import KeepAwake from 'react-native-keep-awake';
 import {DisplayGearBox} from "./common/DisplayGearBox";
 import {DisplayRPM} from "./common/DisplayRPM";
 import {GraphicalRPM} from "./common/GraphicalRPM";
@@ -39,6 +40,7 @@ class Home extends Component {
     };
 
     componentDidMount() {
+        KeepAwake.activate();
         // setInterval(() => {
         //     this.setState({
         //         rpm: 600 + Math.random() * 7400

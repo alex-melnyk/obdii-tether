@@ -6,7 +6,10 @@ const initialState = {
     voltage: 12.7,
     temperature: -40,
     fuel: 0,
-    gear: ''
+    gear: '',
+    scan: {
+        // key1: 'value1'
+    }
 };
 
 export default (state = initialState, action) => {
@@ -15,6 +18,16 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 ...action.payload
+            };
+        case OBDIIActions.OBDII_SCAN_DATA_RECEIVED_ACTION:
+            console.log('STATE', state.scan, action.payload);
+
+            return {
+                ...state,
+                scan: {
+                    ...state.scan,
+                    ...action.payload
+                }
             };
         default:
             return state;

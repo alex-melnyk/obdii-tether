@@ -10,28 +10,20 @@ export const MODE01 = {
     PIDS4: '01 60',
     // PIDs supported  [81 - A0]
     PIDS5: '01 80',
-    // Engine RPM
+    // Engine RPM [((A*256)+B)/4]
     RPM: '01 0C',
-    // Calculated engine load
+    // Calculated engine load value [A*100/255]
     LOAD: '01 04',
-    // Engine coolant temperature
+    // Engine coolant temperature [A-40]
     ECT: '01 05',
     // Vehicle speed
     SPEED: '01 0D',
-    // Run time since engine start
-    RUN_TIME: '01 1F',
-    // Fuel Tank Level Input
-    FUEL_LEVEL: '01 2F',
-    // Monitor status this drive cycle
-    MDC: '01 41',
-    // Control module voltage
-    CMV: '01 42',
-    // Accelerator pedal position D
-    APPD: '01 49',
-    // Accelerator pedal position E
-    APPE: '01 4A',
-    // Accelerator pedal position F
-    APPF: '01 4B',
+    // Fuel system status
+    FUEL_SYSTEM_STATUS: '01 03',
+    // Throttle position
+    TP: '01 11',
+    // Intake air temperature
+    AIT: '01 0F',
 };
 
 const MODE21 = {
@@ -43,3 +35,4 @@ export default {
     MODE01,
     MODE21
 };
+

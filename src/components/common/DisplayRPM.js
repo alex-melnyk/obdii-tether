@@ -9,7 +9,7 @@ class DisplayRPM extends Component {
     animateToValue = (value) => {
         Animated.timing(this.animatedValue, {
             toValue: value / this.props.maximum,
-            duration: 100,
+            duration: 500,
             easing: Easing.linear
         }).start();
     };

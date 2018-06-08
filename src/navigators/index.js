@@ -5,6 +5,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import Home from "../components/Home";
 import Settings from "../components/Settings";
 import HomeContainer from "../containers/HomeContainer";
+import SettingsContainer from "../containers/SettingsContainer";
 
 const BaseNavigator = createBottomTabNavigator({
     Home: {
@@ -14,7 +15,7 @@ const BaseNavigator = createBottomTabNavigator({
         })
     },
     Settings: {
-        screen: Settings,
+        screen: SettingsContainer,
         navigationOptions: () => ({
             tabBarIcon: ({tintColor}) => (<Icon name="gear" size={24} color={tintColor} />)
         })
@@ -26,10 +27,12 @@ const BaseNavigator = createBottomTabNavigator({
 });
 
 const BaseStackNavigator = createStackNavigator({
-    Home: HomeContainer
+    Home: HomeContainer,
+    Settings: SettingsContainer
 }, {
+    initialRouteName: 'Settings',
     headerMode: 'none'
 });
 
 // export default BaseNavigator;
-export default BaseStackNavigator;
+export default BaseNavigator;

@@ -3,6 +3,7 @@ package com.obdiitether;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.corbt.keepawake.KCKeepAwakePackage;
 import com.horcrux.svg.SvgPackage;
 import com.peel.react.TcpSocketsModule;
 import com.oblador.vectoricons.VectorIconsPackage;
@@ -26,6 +27,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new KCKeepAwakePackage(),
             new SvgPackage(),
             new TcpSocketsModule(),
             new VectorIconsPackage()

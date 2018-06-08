@@ -3,7 +3,7 @@ export function commandResponseToObject(command, response) {
         return [obtainATCommandData(command, response)]; //response
     }
 
-    return obtainOBDCommandData(response);
+    return obtainOBDCommandData(command,response);
 }
 
 /**
@@ -15,7 +15,6 @@ function obtainATCommandData(command, data) {
     switch (command) {
         case "AT FI":
             const initOK = data.join(' ').indexOf("OK") >= 0;
-            console.log(command, data, initOK);
             return {
                 initialized: initOK
             };
@@ -29,41 +28,45 @@ function obtainATCommandData(command, data) {
 /**
  *
  */
-function obtainOBDCommandData(data) {
-    return data.reduce((acc, response) => {
-        const bytes = response.split(' ');
+function obtainOBDCommandData(command, data) {
+    if (command.indexOf('21') === 0) {
+        return parseMode21Scan(data);
+    } else {
+        return data.reduce((acc, response) => {
+            const bytes = response.split(' ');
 
-        if (bytes.length > 2) {
-            const mode = bytes[0];
-            const pid = bytes[1];
-            const payload = bytes.slice(2);
+            if (bytes.length > 2) {
+                const mode = bytes[0];
+                const pid = bytes[1];
+                const payload = bytes.slice(2);
 
-            switch (mode) {
-                case "41":
-                    const mode01Data = parseMode01(pid, payload);
+                switch (mode) {
+                    case "41":
+                        const mode01Data = parseMode01(pid, payload);
 
-                    if (mode01Data) {
-                        return [
-                            ...acc,
-                            mode01Data
-                        ];
-                    }
-                    break;
-                case "61":
-                    const mode21Data = parseMode21(pid, payload);
+                        if (mode01Data) {
+                            return [
+                                ...acc,
+                                mode01Data
+                            ];
+                        }
+                        break;
+                    case "61":
+                        const mode21Data = parseMode21(pid, payload);
 
-                    if (mode21Data) {
-                        return [
-                            ...acc,
-                            mode21Data
-                        ];
-                    }
-                    break;
+                        if (mode21Data) {
+                            return [
+                                ...acc,
+                                mode21Data
+                            ];
+                        }
+                        break;
+                }
             }
-        }
 
-        return acc;
-    }, []);
+            return acc;
+        }, []);
+    }
 }
 
 function parseMode01(pid, data) {
@@ -75,6 +78,7 @@ function parseMode01(pid, data) {
         case "0C":
             return {
                 rpm: parseInt(data[0] + data[1], 16) / 4
+                // rpm: (parseInt(data[0], 16)) * 256 + parseInt(data[1], 16) / 4
             };
         case "0D":
             return {
@@ -98,9 +102,42 @@ function parseMode21(pid, data) {
                 };
             }
         }
+        // default:
+        //     let known = "";
+        //     if (data.length > 1) {
+        //         known = data[0].length > data[1].length
+        //             ? `${data[1]} : ${data[0]}`
+        //             : `${data[0]} : ${data[1]}`;
+        //     }
+        //
+        //     known = data[0];
+        //
+        //     return {
+        //         scan: {
+        //             [pid]: known
+        //         }
+        //     };
     }
 
-    return null;
+    // return null;
+}
+
+function parseMode21Scan(data) {
+    let known = "";
+
+    if (data.length > 1) {
+        known = data[0].length > data[1].length
+            ? `${data[1]} \n${data[0]}`
+            : `${data[0]} \n${data[1]}`;
+    } else {
+        known = data[0];
+    }
+
+    return {
+        scan: {
+            [data[0].split(' ')[1]]: known
+        }
+    };
 }
 
 function obtainGear(rawGear) {

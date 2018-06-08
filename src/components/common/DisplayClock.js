@@ -37,7 +37,7 @@ class DisplayClock extends Component {
                 <Text style={{
                     color: Colors.TIMBERWOLF,
                     fontFamily: '1GTA SA'
-                }}>{hours}</Text>
+                }}>{hours < 10 ? `0${hours}` : hours}</Text>
                 <Text style={{
                     opacity: dots,
                     color: Colors.TIMBERWOLF,
@@ -46,7 +46,7 @@ class DisplayClock extends Component {
                 <Text style={{
                     color: Colors.TIMBERWOLF,
                     fontFamily: '1GTA SA'
-                }}>{minutes}</Text>
+                }}>{minutes < 10 ? `0${minutes}` : minutes}</Text>
             </View>
         );
     }

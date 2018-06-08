@@ -13,7 +13,7 @@ class GraphicalRPM extends Component {
     animateToValue = (value) => {
         Animated.timing(this.animatedValue, {
             toValue: value / this.props.maximum,
-            duration: 100
+            duration: 500
         }).start();
     };
 
